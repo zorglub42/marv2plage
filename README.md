@@ -5,7 +5,7 @@ Ce projet contient le code source developper pour réaliser une station meteo po
 * Un batterie LiPo
 * Un "Grove LiPo Rider PRO" (tweaké)
 * un capteur BMP280 (pression/temperature/humidité)
-* une horloge RTC ds1380
+* une horloge RTC ds1307
 * un kit de capteur "adafruit" anemo et girouette
 
 # Contenu des repertoires :

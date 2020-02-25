@@ -79,7 +79,7 @@ EOF
 			createHotspot 
 		else
 			if [ "$SSID" != "zorglubNet" ] ; then
-				nohup openvpn /home/pi/bin/Marv2PlageZorg.ovpn 2>&1 > /var/log/openvpn.log &
+				nohup openvpn /home/pi/bin/Marv2Plage.ovpn 2>&1 > /var/log/openvpn.log &
 				Z_IF=tap0
 			else
 				Z_IF=wlan0

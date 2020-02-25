@@ -395,7 +395,7 @@
 			</div>
 			<div class="col-3 col-lg-1" >
 				<!-- <img src=".{{ url_for('static', filename='img/voltmeter.png')}}" class="img-fluid">  -->
-				<canvas id="pwr" style="display: none"></canvas>
+				<canvas id="pwr"></canvas>
 			</div>
 
 		</div>
@@ -542,6 +542,7 @@
 		}
 	})
 	admin.setTime()
+	$("#pwr").hide()
 </script>
 
 </html>

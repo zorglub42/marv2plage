@@ -48,7 +48,7 @@
   #define lcdPrintL1(line) setLCDCursor(0);lcd.print(line);
   #define lcdPrintL2(line) setLCDCursor(16);lcd.print(line);
 
-  char *roseDesVents[]={"N", "N-NE","NE","E-NE","E", "E-SE", "SE", "S-SE", "S", "S-SW", "SW", "W-SW", "W", "W-NW", "NW", "N-NW", "N/D"};
+  String roseDesVents[]={"N", "N-NE","NE","E-NE","E", "E-SE", "SE", "S-SE", "S", "S-SW", "SW", "W-SW", "W", "W-NW", "NW", "N-NW", "N/D"};
   SoftwareSerial lcd(LCD_TX, LCD_RX);
 
 #endif

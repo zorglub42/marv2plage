@@ -2,6 +2,8 @@
 Ce projet contient le code source developper pour réaliser une station meteo portable a partir de
 * un raspberry PI Zero W
 * un arduino Uno
+* Un batterie LiPo
+* Un "Grove LiPo Rider PRO" (tweaké)
 * un capteur BMP280 (pression/temperature/humidité)
 * une horloge RTC ds1380
 * un kit de capteur "adafruit" anemo et girouette

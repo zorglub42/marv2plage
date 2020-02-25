@@ -1,0 +1,538 @@
+<html>
+
+<head>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href=".{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href=".{{ url_for('static', filename='css/all.css') }}">
+
+	<script src=".{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js')}}"></script>
+	<script src=".{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+	<script src=".{{ url_for('static', filename='js/gauge.min.js') }}"></script>
+	<script src=".{{ url_for('static', filename='js/Chart.bundle.js') }}"></script>
+	<script src=".{{ url_for('static', filename='js/admin.js') }}"></script>
+	<style>
+		@font-face {
+			font-family: 'cruiser';
+			src: url(".{{ url_for('static', filename='fonts/Downtown.ttf') }}") format('truetype');
+			font-weight: normal;
+			font-style: normal;
+
+		}
+
+		.eye-butt{
+			padding-top: 5px;
+			padding-left: 0px;
+		}
+
+		.gauge {
+			height: 550px;
+		}
+		.chart {
+			background: #fff;
+		}
+
+		.actionPict{
+			width: 75px;
+		}
+		#logo {
+			margin-top: 50px;
+			margin-bottom: 50px;
+			text-align: right;
+			margin-left: 50px;
+		}
+		#img-logo {
+			background: #fff;
+			height: 150px;
+		}
+		#pageTitle{
+			color: #fff;
+			text-align: center;
+			font-family: cruiser;
+			font-size: 150px;
+		}
+		.hrTitle {
+			display:block;
+			border:0px;
+			height:15px;
+			width: 90%;
+			background-image: url(".{{ url_for('static', filename='img/inox.png') }}");
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			border-radius: 10px;
+		}
+		@media all and (max-width: 768px) {
+			.hrTitle {
+				height:  10px;
+			}
+			.btn-settings{
+				margin-bottom: 5px;
+			}
+			.chartCanvas{
+
+				height:350px !important;
+
+			}
+			.chart {
+				padding-left: 0px;
+				padding-right: 0px;
+			}
+			.gauge {
+				height: 300px;
+			}
+			#logo {
+				margin-top: 5px;
+				margin-bottom: 5px;
+				text-align: right;
+				margin-left: 5px;
+				margin-right: 5px;
+			}
+			#img-logo {
+				background: #fff;
+				height: 50px;
+			}
+			#pageTitle{
+				color: #fff;
+				text-align: center;
+				font-family: cruiser;
+				font-size: 35px;
+			}
+		}
+
+		body{
+			background-image: url(".{{ url_for('static', filename='img/carbon.jpg') }}")
+		}
+			
+
+		.centered{
+			text-align: center
+		}
+
+		#hrCharts{
+			margin-bottom: 90px;
+		}
+		#content{
+			margin-right: 30px;
+			margin-left: 30px;
+		}
+		#settingsResult{
+			font-family: 'Courier New', Courier
+
+		}
+	</style>
+</head>
+
+<body>
+	<div class="cotainer" id="content">
+<!-- Button trigger modal -->
+	  
+	  <!-- Modal -->
+	  <div class="modal fade" id="advance" tabindex="-1" role="dialog" aria-labelledby="stationAction" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="stationAction">Station Météo FFBC8</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+			  	<div class="row" id="modalContent">
+					<div class="col-4 centered">
+						<a href="#" onclick="return admin.shutdown()">
+							<img src=".{{ url_for('static', filename='img/power-icon.png')}}" title="Arrêter la station météo" class="actionPict">
+						</a>
+					</div>
+					<div class="col-4 centered">
+						<a href="#" onclick="return admin.reboot()">
+							<img src=".{{ url_for('static', filename='img/restart-icon.png')}}" title="Redemarrer la station météo" class="actionPict">
+						</a>
+					</div>
+						<div class="col-4 centered">
+						<a href="#" onclick="admin.settings()" class="btn">
+							<img src=".{{ url_for('static', filename='img/settings-icon.png')}}" title="Paramètres" class="actionPict">
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <div class="modal fade" id="wifiNetworks" tabindex="-1" role="dialog" aria-labelledby="Réseaux wifi à proximité" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Réseaux wifi à proximité</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#settings').modal('show');">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<label>Wifi à proximité</label>
+					<div class="list-group" id="data" >
+						<div  id="rowTpl" style="display:None"> 
+							<div class="list-group-item row" >
+								<a onclick="preferences.setClientSSID('{ssidList[i].ssid}', this)" >
+									<img src=".{{ url_for('static', filename='img/')}}wifi-level-{ssidList[i].quality}.png" title="{ssidList[i].ssid}">
+									{ssidList[i].ssid}
+								</a>
+							</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	  <div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="Paramètres de la station" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="settingsAction">Réglages</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+			  	<div class="row" id="modalSettingsContent">
+					<div class="col-4" id="magCompass">
+						<div class="row text-center">
+							<div class="col-12">
+								<a href="#" onclick="preferences.compassSettings()" class="btn">
+									<img src=".{{ url_for('static', filename='img/compass-icon.png')}}" title="Compas" class="actionPict">
+								</a>
+							</div>
+							<div class="col-12">
+								<label>Boussole</label>								
+							</div>
+							<div class="col-12" id="settingsResultPanel" style="display: none">
+								<hr>
+								<h3>Marvin dit :</h3>
+								<div id="settingsResult">
+								</div>
+	
+							</div>
+						</div>
+					</div>
+					<div class="col-4" id="speeUnitRow">
+						<div class="row text-center">
+							<div class="col-12">
+								<a href="#" onclick="preferences.speedUnitSettings()" class="btn">
+									<img src=".{{ url_for('static', filename='img/speed-icon.png')}}" title="Unités de vitesse" class="actionPict">
+								</a>
+							</div>
+							<div class="col-12">
+								<label>Unité de vitesse</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-4" id="wifiRow">
+						<div class="row text-center">
+							<div class="col-12">
+								<a href="#" onclick="preferences.wifiSettings()" class="btn">
+									<img src=".{{ url_for('static', filename='img/wifi-icon.png')}}" title="Mode de fonctionnement du Wifi" class="actionPict">
+								</a>
+							</div>
+							<div class="col-12">
+								Mode Wifi
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="modalSettingsDetails">
+					<div class="col-12">
+						<hr>
+					</div>
+					<div class="col-12" id="compassSettings" style="display:None">
+						<button class="btn btn-primary btn-settings"  onclick="admin.calibrateMag()" id="calMag">
+							<i class="fas fa-tools"></i> Recalibrer la boussole
+						</button>
+						<button class="btn btn-primary btn-settings" onclick="admin.findNorth()" id="findNorth">
+							<i class="far fa-compass"></i> Rechercher le nord
+						</button>
+					</div>
+					<div class="col-12"  id="speedUnitSettings" style="display:None">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="speedUnit" id="speeUnitKnts" value="knts" onclick="preferences.speed.setUnit('knts')">
+							<label class="form-check-label" for="speeUnitKnts">
+								Noeuds
+							</label>
+							</div>
+							<div class="form-check">
+							<input class="form-check-input" type="radio" name="speedUnit" id="speeUnitKmh" value="kmh" onclick="preferences.speed.setUnit('kmh')">
+							<label class="form-check-label" for="speeUnitKmh">
+								km/h
+							</label>
+							</div>
+							<div class="form-check disabled">
+							<input class="form-check-input" type="radio" name="speedUnit" id="speeUnitMs" value="ms"  onclick="preferences.speed.setUnit('ms')">
+							<label class="form-check-label" for="speeUnitMs">
+								m/s
+							</label>
+						</div>
+					</div>
+					<div id="wifiSettings" style="display:None">
+						<label>Addresse MAC:</label><label id="mac"></label>
+						<hr>
+						<form accept-charset="UTF-8" role="form" id="frmWifiSettings">
+							Mode wifi de démarrage
+							<div class="form-check">
+								<div class="row">
+									<div class="col-1">
+										<input  type="radio" name="wifiMode" id="wifiModeClient" value="client" onclick="preferences.checkWifiMode()">
+									</div>
+									<div class="col-4">
+										<label for="wifiModeClient">
+											Client
+										</label>
+									</div>
+									<div class="col-1">
+										<input  type="radio" name="wifiMode" id="wifiModeHotspot" value="hotspot" onclick="preferences.checkWifiMode()	">
+									</div>
+									<div class="col-4">
+										<label for="wifiModeHotspot">
+											Point d'accès
+										</label>
+									</div>
+								</div>
+							</div>
+			
+						</form>
+						<div class="form-group" id="hostspotModeSettings">
+							Caractéristiques du point d'accès
+							<fieldset>
+								<div class="row">
+									<div class="col-2">
+										<label for="hotspotSSID">SSID</label>
+									</div>
+									<div class="col-10">
+										<input type="text" class="form-control" name="hotspotSSID" id="hotspotSSID">
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-2">
+										<label for="hotspotPASS">Mot de passe</label>
+									</div>
+									<div class="col-8">
+										<input type="password" class="form-control" name="hotspotPASS" id="hotspotPASS">
+									</div>
+									<div class="col-1 eye-butt">
+										<button type="button" class="btn btn-default" title="Voir le mot de passe" onclick="preferences.revealPassword('#hotspotPASS')">
+											<span class="fas fa-eye" aria-hidden="true"></span>
+										  </button>
+									</div>
+							</div>
+							</fieldset>
+
+						</div>
+						<div class="form-group" id="clientModeSettings" style="display:None">
+							Se connecter au WIFI
+							<fieldset>
+									<div class="row">
+										<div class="col-2">
+											<label for="clientSSID">SSID</label>
+										</div>
+										<div class="col-10">
+											<input type="text" class="form-control" name="clientSSID" id="clientSSID" onclick="$('#wifiNetworks').modal('show');$('#settings').modal('hide');">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-2">
+											<label for="clientPASS">Mot de passe</label>
+										</div>
+										<div class="col-8">
+											<input type="password" class="form-control" name="clientPASS" id="clientPASS">
+										</div>
+										<div class="col-1 eye-butt">
+											<button type="button" class="btn btn-default" title="Voir le mot de passe" onclick="preferences.revealPassword('#clientPASS')">
+												<span class="fas fa-eye" aria-hidden="true"></span>
+											  </button>
+										</div>
+									</div>
+								
+							</fieldset>
+						</div>
+						<div class="col-12">
+							<button class="btn btn-primary btn-settings"  onclick="preferences.saveWifiSettings()">
+								Appliquer
+							</button>								
+						</div>
+									
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+
+		<div class="row">
+			<div class="col-1" id="logo">
+				<a href="#"><img id="img-logo" src=".{{url_for('static', filename='img/logo-ffbc8.png')}}" data-toggle="modal" data-target="#advance"></a>
+			</div>
+			<div class="col-6 col-lg-9">
+				<div id="pageTitle">
+					Marvin<font color="#ff0000">42</font> is on the beach!
+				</div>
+			</div>
+			<div class="col-3 col-lg-1" >
+				<!-- <img src=".{{ url_for('static', filename='img/voltmeter.png')}}" class="img-fluid">  -->
+				<canvas id="pwr" style="display: none"></canvas>
+			</div>
+
+		</div>
+		<hr class="hrTitle">
+		<div class="row" id="gauges">
+			<div class="col-12 col-lg-3">
+				<div class="gauge">
+					<canvas id="compass"></canvas>
+				</div>
+			</div>
+			<div class="col-12 col-lg-3">
+				<div class="gauge">
+					<canvas id="wind-speed"></canvas>
+				</div>
+			</div>
+			<div class="col-12 col-lg-2">
+				<div class="gauge">
+					<canvas id="press"></canvas>
+				</div>
+			</div>
+			<div class="col-12 col-lg-2">
+				<div class="gauge">
+					<canvas id="temp"></canvas>
+				</div>
+			</div>
+			<div class="col-12 col-lg-2">
+				<div class="gauge">
+					<canvas id="humi"></canvas>
+				</div>
+			</div>
+		</div>
+		<hr class="hrTitle" id="hrCharts">
+		<div class="row chart">
+			<div class="col-12 col-lg-6">
+				<canvas id="wheading-trend30M" class="chartCanvas">
+			</div>
+			<div class="col-12 col-lg-6">
+				<canvas id="wheading-trend6H" class="chartCanvas">
+			</div>
+		</div>
+		<hr>
+
+		<div class="row chart">
+			<div class="col-12 col-lg-6">
+				<canvas id="wspeed-trend30M" class="chartCanvas">
+			</div>
+			<div class="col-12 col-lg-6">
+				<canvas id="wspeed-trend6H" class="chartCanvas">
+			</div>
+		</div>
+		<hr>
+
+		<div class="row chart">
+			<div class="col-12 col-lg-6">
+				<canvas id="press-trend30M" class="chartCanvas">
+			</div>
+			<div class="col-12 col-lg-6">
+				<canvas id="press-trend6H" class="chartCanvas">
+			</div>
+		</div>
+		<hr>
+
+		<div class="row chart">
+			<div class="col-12 col-lg-6">
+				<canvas id="temp-trend30M" class="chartCanvas">
+			</div>
+			<div class="col-12 col-lg-6">
+				<canvas id="temp-trend6H" class="chartCanvas">
+			</div>
+		</div>
+		<hr>
+
+		<div class="row chart">
+			<div class="col-12 col-lg-6">
+				<canvas id="hum-trend30M" class="chartCanvas">
+			</div>
+			<div class="col-12 col-lg-6">
+				<div class="chart">
+					<canvas id="hum-trend6H" class="chartCanvas">
+				</div>
+			</div>
+		</div>
+		<hr>
+
+</body>
+<script src=".{{ url_for('static', filename='js/senddatetime.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/settings.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/datafetcher.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/utils.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/prefs.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/sensorchart.js') }}"></script>
+
+<script src=".{{ url_for('static', filename='js/currentvalues.js') }}"></script>
+
+<script src=".{{ url_for('static', filename='js/wspeedtrend.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/wheadingtrend.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/temptrend.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/humtrend.js') }}"></script>
+<script src=".{{ url_for('static', filename='js/presstrend.js') }}"></script>
+<script>
+	currentValues.start(
+		"compass",
+		"wind-speed",
+		"temp",
+		"humi",
+		"press",
+		"pwr",
+		chartsDef
+	)
+
+	windSpeedTrend.start(
+		"wspeed-trend6H",
+		"wspeed-trend30M",
+		chartsDef,
+		sensors.speed
+	)
+	windHeadingTrend.start(
+		"wheading-trend6H",
+		"wheading-trend30M",
+		chartsDef,
+		sensors.compass
+	)
+	temperatureTrend.start(
+		"temp-trend6H",
+		"temp-trend30M",
+		chartsDef,
+		sensors.temperature
+	)
+	pressureTrend.start(
+		"press-trend6H",
+		"press-trend30M",
+		chartsDef,
+		sensors.pressure
+	)
+	humidityTrend.start(
+		"hum-trend6H",
+		"hum-trend30M",
+		chartsDef,
+		sensors.humidity
+	)
+	isCompassSupported((supported) => {
+		if (! supported){
+			$("#magCompass").hide()
+		}
+	})
+	admin.setTime()
+</script>
+
+</html>

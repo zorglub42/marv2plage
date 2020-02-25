@@ -1,0 +1,2 @@
+CREATE CONTINUOUS QUERY CQ1 ON meteo BEGIN SELECT mean(value) AS gps INTO meteo.autogen.sampling FROM meteo.autogen.GPS_S GROUP BY time(5s) END;
+CREATE CONTINUOUS QUERY CQ2 ON meteo BEGIN SELECT mean(value) AS anemo INTO meteo.autogen.sampling FROM meteo.autogen.WIND_S GROUP BY time(5s) END;

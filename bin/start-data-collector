@@ -1,0 +1,10 @@
+#!/bin/bash
+netstat -laputn | grep 6942 | grep LISTEN
+while [ $? -ne 0 ] ; do
+	echo "arduino controller is not here"
+        sleep 1
+        netstat -laputn | grep 6942 | grep LISTEN
+done
+cd /home/pi/bin/
+python3 /home/pi/bin/data-collector.py
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /home/pi/src/webapp
+PROCS=$(nproc)
+gunicorn -w $(expr $PROCS + 1) --threads $(expr $PROCS '*' 3) -b 0.0.0.0:80 app:APP
+

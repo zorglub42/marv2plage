@@ -1,0 +1,5 @@
+#!/bin/bash
+DATETIME=$1
+date --iso-8601 -s $DATETIME
+hwclock -w
+echo "date set to "$(date)" from "$DATETIME

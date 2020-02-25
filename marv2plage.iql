@@ -1,0 +1,7 @@
+SELECT count(*) FROM A_PRESS;
+SELECT count(*) FROM HUM;
+SELECT count(*) FROM MEM;
+SELECT count(*) FROM PWR_LOAD;
+SELECT count(*) FROM TEMP;
+SELECT count(*) FROM WIND_H;
+SELECT count(*) FROM WIND_S;

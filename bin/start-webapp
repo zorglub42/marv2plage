@@ -6,7 +6,7 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 
-cd /home/pi/src/webapp
+cd /home/pi/src/marv2plage/webapp
 PROCS=$(nproc)
 gunicorn -w $(expr $PROCS + 1) --threads $(expr $PROCS '*' 3) -b 0.0.0.0:80 app:APP
 

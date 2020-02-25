@@ -19,4 +19,4 @@ Sur le raspberry :
 * le bus I2C doit etre activé
 * python3 dispo
 * influxdb dispo
-* arduino-controller dispo (https://raw.githubusercontent.com/zorglub42/serial-com/)
+* arduino-controller dispo (https://github.com/zorglub42/serial-com)

@@ -21,6 +21,7 @@
 	<script src=".{{ url_for('static', filename='js/gauge.min.js') }}"></script>
 	<script src=".{{ url_for('static', filename='js/Chart.bundle.js') }}"></script>
 	<script src=".{{ url_for('static', filename='js/admin.js') }}"></script>
+
 	<style>
 		@font-face {
 			font-family: 'cruiser';
@@ -390,12 +391,11 @@
 			</div>
 			<div class="col-6 col-lg-9">
 				<div id="pageTitle">
-					Marvin<font color="#ff0000">42</font> is on the beach!
+					Marvin<font color="#ff0000">42</font> is on the beach! 
 				</div>
 			</div>
-			<div class="col-3 col-lg-1" >
-				<!-- <img src=".{{ url_for('static', filename='img/voltmeter.png')}}" class="img-fluid">  -->
-				<canvas id="pwr"></canvas>
+			<div class="col-1 col-lg-1" >
+				<canvas id="pwr" style="display: none"></canvas>
 			</div>
 
 		</div>
@@ -481,6 +481,7 @@
 		<hr>
 
 </body>
+
 <script src=".{{ url_for('static', filename='js/senddatetime.js') }}"></script>
 <script src=".{{ url_for('static', filename='js/settings.js') }}"></script>
 <script src=".{{ url_for('static', filename='js/datafetcher.js') }}"></script>
@@ -495,6 +496,7 @@
 <script src=".{{ url_for('static', filename='js/temptrend.js') }}"></script>
 <script src=".{{ url_for('static', filename='js/humtrend.js') }}"></script>
 <script src=".{{ url_for('static', filename='js/presstrend.js') }}"></script>
+
 <script>
 	currentValues.start(
 		"compass",
@@ -542,7 +544,11 @@
 		}
 	})
 	admin.setTime()
-	$("#pwr").hide()
+	if (!document.location.toString().includes("?")){
+		// force reload to display power gauge properly
+		document.location = document.location + "?"
+	}
+
 </script>
 
 </html>

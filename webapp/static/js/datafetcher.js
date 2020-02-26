@@ -100,12 +100,6 @@ async function loopFetchInstantValues(gauges, timeout){
 
 		preferences.applyPref(gauges.speed.chart, preferences.speed.chartOptions.current)
 
-		// gauges.speed.chart.options.units = preferences.speed.chartOptions.current.unit
-		// gauges.speed.chart.options.minValue = preferences.speed.chartOptions.current.minValue
-		// gauges.speed.chart.options.maxValue = preferences.speed.chartOptions.current.maxValue
-		// gauges.speed.chart.options.majorTicks = preferences.speed.chartOptions.current.majorTicks
-		// gauges.speed.chart.options.minorTicks = preferences.speed.chartOptions.current.minorTicks
-		// gauges.speed.chart.options.highlightsWidth = preferences.speed.chartOptions.current.highlightsWidth
 		
 		gauges.pressure.chart.value = data.pressure.value
 		gauges.compass.chart.value = data.windheading.value

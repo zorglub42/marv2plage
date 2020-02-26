@@ -29,21 +29,11 @@ var currentValues = {
 				minorTicks: 5,
 				highlightsWidth: 30,
 				highlights: [
-				// {
-				// 		"from": "0",
-				// 		"to": "15",
-				// 		"color": "rgba(0,120 ,0, 0.3)"
-				// 	},
-				// 	{
-				// 		"from": "15",
-				// 		"to": "30",
-				// 		"color": "rgb(255,140,0, 0.3)"
-				// 	},
-				// 	{
-				// 		"from": "30",
-				// 		"to": "45",
-				// 		"color": "rgb(255,0 ,0, 0.3)"
-				// 	},
+					{
+							"from": "0",
+							"to": "0",
+							"color": "rgba(120,0,120, 0.3)"
+					}
 				],
 				valueBox: true,
 				valueInt: 0,
@@ -115,6 +105,14 @@ var currentValues = {
 				value: 270,
 				highlightsWidth: 80,
 				// animationTarget: "plate"
+				highlights: [
+					{
+							"from": "0",
+							"to": "0",
+							"color": "rgba(120,0,120, 0.3)"
+					}
+				]
+	
 			}).draw()
 		}
 	},

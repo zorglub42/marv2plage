@@ -91,25 +91,7 @@ async function isCompassSupported(callback){
 	}
 	callback(supported)
 }
-
-async function loopFetchInstantValues(gauges, timeout){
-	response = await fetch("api/sensors/last").catch(error => { console.log(error)})
-	if (typeof response !== "undefined" && response.status == 200){
-		data = await response.json()
-		gauges.speed.chart.value = preferences.speed.getFormatter()(data.windspeed.value) //formatters.ms2knts(data.windspeed.value)
-
-		preferences.applyPref(gauges.speed.chart, preferences.speed.chartOptions.current)
-
-		
-		gauges.pressure.chart.value = data.pressure.value
-		gauges.compass.chart.value = data.windheading.value
-		gauges.temperature.chart.value = data.temperature.value
-		gauges.humidity.chart.value = data.humidity.value
-		if (data.load.value != null){
-			gauges.power.chart.value = data.load.value
-			$("#" + gauges.power.id).show()
-		}
-	}
+async function loopFetchInstantValuesLimits(gauges, timeout){
 	response = await fetch("api/sensors/WIND_H/values?fromOffset=-5m&groupInterval=1d").catch(error => { console.log(error)})
 	if (typeof response !== "undefined" &&response.status == 200){
 		data = await response.json()
@@ -139,6 +121,51 @@ async function loopFetchInstantValues(gauges, timeout){
 			]
 			gauges.speed.chart.update()
 		}
+	}
+	if (timeout != 0){
+		setTimeout(
+			()=>{loopFetchInstantValuesLimits(gauges, timeout)},
+			timeout
+		);
+	}
+}
+async function loopFetchInstantValues(gauges, timeout){
+	response = await fetch("api/sensors/last").catch(error => { console.log(error)})
+	if (typeof response !== "undefined" && response.status == 200){
+		data = await response.json()
+		gauges.speed.chart.value = preferences.speed.getFormatter()(data.windspeed.value) //formatters.ms2knts(data.windspeed.value)
+
+		preferences.applyPref(gauges.speed.chart, preferences.speed.chartOptions.current)
+
+		
+		gauges.pressure.chart.value = data.pressure.value
+		gauges.compass.chart.value = data.windheading.value
+		gauges.temperature.chart.value = data.temperature.value
+		gauges.humidity.chart.value = data.humidity.value
+		if (data.load.value != null){
+			gauges.power.chart.value = data.load.value
+			$("#" + gauges.power.id).show()
+		}
+	}
+	//Ensure heading in between 0..359 deg
+	compassValue = (currentValues.compass.chart.value+360)%360
+	//Ensure limits are between 0..360 deg
+	v1 = currentValues.compass.chart.options.highlights[0].from
+	v2 = (currentValues.compass.chart.options.highlights[0].to+360)%361
+	//Ensure limits a properly ordered
+	dir_from = Math.min(v1, v2)
+	dir_to = Math.max(v1, v2)
+
+	speedValue = currentValues.speed.chart.value
+	v1 = currentValues.speed.chart.options.highlights[0].from
+	v2 = currentValues.speed.chart.options.highlights[0].to
+	//Ensure limits a properly ordered
+	spd_from = Math.min(v1, v2)
+	spd_to = Math.max(v1, v2)
+
+	//Limits have changed, reload
+	if (compassValue < dir_from || compassValue > dir_to || speedValue < spd_from || speedValue > spd_to ){
+		loopFetchInstantValuesLimits(gauges, 0)
 	}
 	if (timeout != 0){
 		setTimeout(

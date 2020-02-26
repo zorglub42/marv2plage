@@ -22,21 +22,6 @@ API = {
     "title": 'FFBC8 Weather station API',
     "description": 'FFBC8 Weather station API',
     "authorizations": None
-    # {
-    #     'basicAuth': {
-    #         'type': 'basic',
-    #     },
-    #     'OSA Cookie': {
-    #         'type': 'apiKey',
-    #         'in': 'cookie',
-    #         'name': 'OSAAuthToken',
-    #         'description': (
-    #             "<font color=red>Cookies are not supported by this "
-    #             "Swagger API 2.0. But OSA Cookie works with regular "
-    #             "HTTP Clients.</font>"
-    #         )
-    #     }
-    # }
 }
 SENSORS = [
     {"id": "A_PRESS", "label": "pressure"},

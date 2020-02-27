@@ -6,7 +6,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 
 var windHeadingTrendDef = {
-	formatter: formatters.round,
+	formatter: formatters.roundDeg,
 	sensor: "WIND_H",
 	trend6H: {
 		chart: null,

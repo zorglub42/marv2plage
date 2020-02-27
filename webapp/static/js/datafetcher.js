@@ -8,6 +8,12 @@ var formatters = {
 	identity: function(v){
 		return(v)
 	},
+	roundDeg: function(v){
+		if (v == null){
+			return v
+		}
+		return (Math.round(v)+360)%361
+	},
 	round: function(v){
 		if (v == null){
 			return v

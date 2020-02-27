@@ -150,7 +150,7 @@ class AdminService(object):
             qual = int(((float(ratio[0]) / float(ratio[1]))*100)/25)
             ssid_parts = data[i + 1].strip().split('"')
             ssid = ssid_parts[1]
-            if qual > 0 and not self._net_exists(nets, ssid):
+            if qual > 0 and ssid != "" and not self._net_exists(nets, ssid):
                 nets.append(
                     {
                         "ssid": ssid,

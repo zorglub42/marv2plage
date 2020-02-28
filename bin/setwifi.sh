@@ -100,7 +100,7 @@ EOF
 				MAC=$(ifconfig wlan0| grep ether | awk '{print $2}')
 				Z_IP=$(ifconfig $Z_IF | grep "inet 10.10.10"|awk '{print $2}')
 				echo Connected to zorg network with ip $Z_IP
-				curl "http://robert.zorglub42.lan:84/chat/bot/api/station.php?mac=$MAC&ip=$Z_IP"
+				curl "http://10.10.10.22:84/chat/bot/api/station.php?mac=$MAC&ip=$Z_IP"
 				
 			fi
 
@@ -117,3 +117,4 @@ if [ "$MODE" == "client" ] ; then
 else
 	createHotspot
 fi
+exit 0

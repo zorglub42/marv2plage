@@ -25,7 +25,30 @@
 
 #define ANEMO_PIN 3
 #define WIND_VANE_PIN A1
-#define DHTPIN 4     // what pin we're connected to
+
+//Sampling durations  
+#define P_SAMPLING_DURATION  30 //atmospheric pressure
+#define T_SAMPLING_DURATION  30 //temperature
+#define H_SAMPLING_DURATION  30 //humidity
+#define WH_SAMPLING_DURATION 10 // wind heading
+#define WS_SAMPLING_DURATION 2 //Wind speed
+
+//Measurements and commands names 
+#define ATMOSPHERIC_PRESSURE "A_PRESS"
+#define TEMPERATURE "TEMP"
+#define HUMIDITY "HUM"
+#define WIND_HEADING "WIND_H"
+#define WIND_SPEED "WIND_S"
+
+// Anemometer parameters
+#define ANEMO_RADIUS 0.09 //Anemometer radius in m
+#define BOUNCE_DURATION 2
+//#define ALPHA_A 2.148 //Ponderation factor for anemo (JM etalonage)
+#define ALPHA_A 2.5
+
+
+// Wind vane  parameters
+#define WIND_VANE_TOLERANCE 0.02
 
 #ifdef WITH_SCREEN
 
@@ -89,43 +112,13 @@
   } mag_params;
 
   unsigned int magShift;
+  MPU9250 mpu(Wire,0x68);
 #endif
-//Sampling durations  
-#define P_SAMPLING_DURATION  30 //atmospheric pressure
-#define T_SAMPLING_DURATION  30 //temperature
-#define H_SAMPLING_DURATION  30 //humidity
-#define WH_SAMPLING_DURATION 10 // wind heading
-#define WS_SAMPLING_DURATION 2 //Wind speed
-
-//Measurements and commands names 
-#define ATMOSPHERIC_PRESSURE "A_PRESS"
-#define TEMPERATURE "TEMP"
-#define HUMIDITY "HUM"
-#define WIND_HEADING "WIND_H"
-#define WIND_SPEED "WIND_S"
-
-// Anemometer parameters
-#define ANEMO_RADIUS 0.09 //Anemometer radius in m
-#define BOUNCE_DURATION 2
-//#define ALPHA_A 2.148 //Ponderation factor for anemo (JM etalonage)
-#define ALPHA_A 2.5
-
-
-// Wind vane  parameters
-#define WIND_VANE_TOLERANCE 0.02
-
-
-
-
 
 // Create object to handle connection to socket server
 // Can use as well HardwareSerial as SoftwareSerial
 SerialCom com(&Serial);
 Adafruit_BME280 bme; // I2C
-
-#ifdef WITH_COMPASS
-  MPU9250 mpu(Wire,0x68);
-#endif
 
 //Previsous measurement times
 time_t p_prev;
@@ -299,6 +292,7 @@ void setup() {
       calibrateMag();
     }
     mpu.calibrateMag(200);
+    magShift = getMagShift();
   #else
     Serial.println(F("Not using mag compass"));
   #endif
@@ -322,9 +316,6 @@ void setup() {
   h_prev = now() + H_SAMPLING_DURATION;
   wh_prev = now();
 
-  #ifdef WITH_COMPASS
-    magShift = getMagShift();
-  #endif
   #ifdef WITH_PWR_CTL
     pinMode(PWR_SWITCH, OUTPUT);
     pinMode(PWR_1, INPUT);
@@ -433,6 +424,7 @@ void serialComHandler(char *cmd){
 #endif
 
 
+// return true is val is "near" ref. See WIND_VANE_TOLERANCE) 
 uint8_t near(int val, int ref){
   int low = ref*(1-WIND_VANE_TOLERANCE);
   int high = ref*(1+WIND_VANE_TOLERANCE);
@@ -441,8 +433,8 @@ uint8_t near(int val, int ref){
 }
 
 
-//Return weathercock orientation as number for 0 (N) to 15 (N-NW) clockwise
-// when weathercock power supply is 5V
+//Return wind vane orientation as number for 0 (N) to 15 (N-NW) clockwise
+// when wind vane power supply is 5V
 int getOrientation(int v){
   int o;
   if (near(v, 787)){
@@ -482,6 +474,7 @@ int getOrientation(int v){
   }
   return o;
 }
+
 //Get and send atmospheric pressure:
 // - if force 
 // - if sampling duration is elapsed
@@ -527,7 +520,6 @@ void getHumidity(uint8_t force){
 //Get and send wind heading:
 // - if force 
 // - if sampling duration is elapsed
-
 void getWindHeading(uint8_t force){
   float cur_heading;
   if (now() - wh_prev >= WH_SAMPLING_DURATION  || force){
@@ -592,19 +584,6 @@ volatile void countAnemoTicks(){
   }   
 }
 
-//Return string as number ("len" first digits of str)
-int getVal(char *str, uint8_t len){
-  int rc;
-  char bckup;
-
-  bckup=str[len];
-  str[len]=0;
-  rc=atoi(str);
-  str[len]=bckup;
-
-  return rc;
-  
-}
 
 void loop() {
   com.handleSerialCom();

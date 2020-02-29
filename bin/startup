@@ -14,4 +14,4 @@ cd /home/pi/bin/
 nohup /home/pi/bin/start-data-collector 2>&1 >/dev/null   &
 cd /tmp
 nohup /home/pi/bin/start-webapp 2>&1 > /dev/null  &
-nohup su - pi -c "/home/pi/bin/gotty -p 4242 -w -c 'pi:ffbc8meteo' bash" &
+nohup su - pi -c "/home/pi/bin/gotty -p 4242 -w -c 'pi:ffbc8meteo' bash" 2>&1 >/dev/null &

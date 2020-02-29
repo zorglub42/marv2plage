@@ -10,6 +10,8 @@ MODE=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.mode|awk -F '"' '{print$2}
 IF=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.if|awk -F '"' '{print$2}' )
 
 function createHotspot(){
+	ps aux | grep openvpn|grep -v grep | awk '{print $2}' | xargs kill
+
 	SSID=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.hotspot.ssid|awk -F '"' '{print$2}' )
 	PASSPHRASE=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.hotspot.passphrase|awk -F '"' '{print$2}' )
 	echo "creating Hotspot with SSID=$SSID"
@@ -23,8 +25,8 @@ EOF
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 EOF
-	ifdown $IF
-	ifup $IF
+	ifconfig $IF down
+	ifconfig $IF up
 
 
 
@@ -35,6 +37,7 @@ EOF
 	service hostapd stop	
 
 	service dnsmasq start
+	service dhcpcd restart
 	service hostapd start	
 
 }
@@ -60,8 +63,9 @@ EOF
 		cat /etc/dhcpcd.conf | egrep -v 'interface wlan0|static ip_address=192.168.42.1/24' > /tmp/$$
 		mv /tmp/$$ /etc/dhcpcd.conf
 
-		ifdown $IF
-		ifup $IF
+		ifconfig $IF down
+		service dhcpcd restart
+		ifconfig $IF up
 		echo waitting for $IF to come up...
 		ifconfig $IF| grep "inet " >/dev/null
 		HAVE_IP=$?
@@ -73,12 +77,14 @@ EOF
 			COUNT=$(expr $COUNT + 1)
 			ifconfig $IF| grep "inet " >/dev/null
 			HAVE_IP=$?
+			echo $HAVE_IP $COUNT
 		done
 		if  [ $HAVE_IP -ne 0 ] ; then
 			echo "Can't reach $SSID"
 			createHotspot 
 		else
 			if [ "$SSID" != "zorglubNet" ] ; then
+				:>/var/log/openvpn.log 
 				nohup openvpn /home/pi/bin/Marv2Plage.ovpn 2>&1 > /var/log/openvpn.log &
 				Z_IF=tap0
 			else
@@ -90,9 +96,10 @@ EOF
 			while [ $PING -ne 0 -a $COUNT -lt 20 ] ; do
 				echo Waitting for vpn to come up
 				sleep 1
-				COUNT=$(expr $COUT + 1)
+				COUNT=$(expr $COUNT + 1)
 				ping -c 1 -W 1 -w 1 10.10.10.1 > /dev/null
 				PING=$?
+				echo $PING $COUNT
 			done
 			if [ $PING -ne 0 ] ; then
 				createHotspot
@@ -111,7 +118,8 @@ EOF
 }
 
 
-killall openvpn
+ps aux | grep openvpn|grep -v grep | awk '{print $2}' | xargs kill
+
 if [ "$MODE" == "client" ] ; then
 	connectWIFI
 else

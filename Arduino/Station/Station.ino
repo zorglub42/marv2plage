@@ -61,7 +61,7 @@
   #define PWR_4 11
   #define PWR_SWITCH 7
 
-  #define PWR_SAMPLING_DURATION 15
+  #define PWR_SAMPLING_DURATION 60
   #define POWER_LOAD "PWR_LOAD"
 
   time_t pwr_prev;

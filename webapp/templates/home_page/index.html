@@ -498,57 +498,57 @@
 <script src=".{{ url_for('static', filename='js/presstrend.js') }}"></script>
 
 <script>
-	currentValues.start(
-		"compass",
-		"wind-speed",
-		"temp",
-		"humi",
-		"press",
-		"pwr",
-		chartsDef
-	)
-
-	windSpeedTrend.start(
-		"wspeed-trend6H",
-		"wspeed-trend30M",
-		chartsDef,
-		sensors.speed
-	)
-	windHeadingTrend.start(
-		"wheading-trend6H",
-		"wheading-trend30M",
-		chartsDef,
-		sensors.compass
-	)
-	temperatureTrend.start(
-		"temp-trend6H",
-		"temp-trend30M",
-		chartsDef,
-		sensors.temperature
-	)
-	pressureTrend.start(
-		"press-trend6H",
-		"press-trend30M",
-		chartsDef,
-		sensors.pressure
-	)
-	humidityTrend.start(
-		"hum-trend6H",
-		"hum-trend30M",
-		chartsDef,
-		sensors.humidity
-	)
-	isCompassSupported((supported) => {
-		if (! supported){
-			$("#magCompass").hide()
-		}
-	})
-	admin.setTime()
 	if (!document.location.toString().includes("?")){
 		// force reload to display power gauge properly
 		document.location = document.location + "?"
-	}
+	}else{
+		currentValues.start(
+			"compass",
+			"wind-speed",
+			"temp",
+			"humi",
+			"press",
+			"pwr",
+			chartsDef
+		)
 
+		windSpeedTrend.start(
+			"wspeed-trend6H",
+			"wspeed-trend30M",
+			chartsDef,
+			sensors.speed
+		)
+		windHeadingTrend.start(
+			"wheading-trend6H",
+			"wheading-trend30M",
+			chartsDef,
+			sensors.compass
+		)
+		temperatureTrend.start(
+			"temp-trend6H",
+			"temp-trend30M",
+			chartsDef,
+			sensors.temperature
+		)
+		pressureTrend.start(
+			"press-trend6H",
+			"press-trend30M",
+			chartsDef,
+			sensors.pressure
+		)
+		humidityTrend.start(
+			"hum-trend6H",
+			"hum-trend30M",
+			chartsDef,
+			sensors.humidity
+		)
+		isCompassSupported((supported) => {
+			if (! supported){
+				$("#magCompass").hide()
+			}
+		})
+		admin.setTime()
+	}
 </script>
 
 </html>

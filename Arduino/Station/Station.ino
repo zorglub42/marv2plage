@@ -59,7 +59,7 @@
   #define PWR_2 9
   #define PWR_3 10
   #define PWR_4 11
-  // #define PWR_SWITCH 7
+  #define PWR_SWITCH 7
 
   #define PWR_SAMPLING_DURATION 15
   #define POWER_LOAD "PWR_LOAD"
@@ -222,15 +222,15 @@ float cur_wind_speed;
   int getBatteryLoad(int8_t force){
 
     if (now() - pwr_prev >= PWR_SAMPLING_DURATION  || force){
-      // digitalWrite(PWR_SWITCH, HIGH);
-      // delay(100);
+      digitalWrite(PWR_SWITCH, HIGH);
+      delay(100);
     
       int8_t load = 0;
       if (digitalRead(PWR_1)) load+=25;
       if (digitalRead(PWR_2)) load+=25;
       if (digitalRead(PWR_3)) load+=25;
       if (digitalRead(PWR_4)) load+=25;
-      // digitalWrite(PWR_SWITCH, LOW);
+      digitalWrite(PWR_SWITCH, LOW);
       
       com.print(POWER_LOAD);com.print(" ");
       com.println(load);
@@ -319,7 +319,7 @@ void setup() {
     magShift = getMagShift();
   #endif
   #ifdef WITH_PWR_CTL
-    // pinMode(PWR_SWITCH, OUTPUT);
+    pinMode(PWR_SWITCH, OUTPUT);
     pinMode(PWR_1, INPUT);
     pinMode(PWR_2, INPUT);
     pinMode(PWR_3, INPUT);

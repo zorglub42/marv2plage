@@ -28,6 +28,7 @@
 #define DHTPIN 4     // what pin we're connected to
 
 #ifdef WITH_SCREEN
+
   #include <SoftwareSerial.h>
 
   #define LCD_TX 4
@@ -216,6 +217,13 @@ float cur_wind_speed;
       displayMetrics();
     }
   }
+
+  void bootMessage(){
+    setBacklight(255);
+    lcdPrint2("FFBC8 Station", "is starting")
+    delay(2000);
+    shutdownDisplay();
+  }
 #endif
 
 #ifdef WITH_PWR_CTL
@@ -231,7 +239,6 @@ float cur_wind_speed;
       if (digitalRead(PWR_3)) load+=25;
       if (digitalRead(PWR_4)) load+=25;
       digitalWrite(PWR_SWITCH, LOW);
-      
       com.print(POWER_LOAD);com.print(" ");
       com.println(load);
       if (!force) pwr_prev = now();
@@ -299,7 +306,7 @@ void setup() {
   #ifdef WITH_SCREEN
       pinMode(BUTTON_PIN, INPUT);
       lcd.begin(LCD_BAUD);  // Start the LCD at 9600 baud
-      shutdownDisplay();
+      bootMessage();
   #endif
 
   wh_prev = 0;

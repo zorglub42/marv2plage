@@ -195,6 +195,7 @@ float cur_wind_speed;
     lcdPrint1(F("Batt. : "));
     lcd.print(getBatteryLoad(1));
     lcd.print(" %");
+    delay(DISPLY_DURATION);
     lcdPrint2("IP :", curIp);
     delay(DISPLY_DURATION);
     shutdownDisplay();

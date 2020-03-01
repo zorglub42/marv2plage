@@ -59,6 +59,7 @@
   #define LCD_BAUD 9600
   #define BUTTON_PIN 6
   #define DISPLAY_METRICS "DM"
+  #define SET_IP "IP"
 
   #define NO_CLICK 0
   #define SHORT_CLICK 1
@@ -74,6 +75,7 @@
 
   String roseDesVents[]={"N", "N-NE","NE","E-NE","E", "E-SE", "SE", "S-SE", "S", "S-SW", "SW", "W-SW", "W", "W-NW", "NW", "N-NW", "N/D"};
   SoftwareSerial lcd(LCD_TX, LCD_RX);
+  char curIp[17];
 
 #endif
 
@@ -193,6 +195,7 @@ float cur_wind_speed;
     lcdPrint1(F("Batt. : "));
     lcd.print(getBatteryLoad(1));
     lcd.print(" %");
+    lcdPrint2("IP :", curIp);
     delay(DISPLY_DURATION);
     shutdownDisplay();
   }
@@ -300,6 +303,7 @@ void setup() {
   #ifdef WITH_SCREEN
       pinMode(BUTTON_PIN, INPUT);
       lcd.begin(LCD_BAUD);  // Start the LCD at 9600 baud
+      curIp[0]=0;
       bootMessage();
   #endif
 
@@ -362,6 +366,9 @@ void serialComHandler(char *cmd){
     delay(2000);
     shutdownDisplay();
     com.print("DONE");
+  }else if (strstr(cmd, SET_IP)){
+    strcpy(curIp, cmd + 3);
+    displayPower();
   #endif
   }
 }

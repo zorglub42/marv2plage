@@ -196,21 +196,25 @@ float cur_wind_speed;
     lcd.print(getBatteryLoad(1));
     lcd.print(" %");
     delay(DISPLY_DURATION);
-    lcdPrint2("IP :", curIp);
-    delay(DISPLY_DURATION);
     shutdownDisplay();
   }
   #endif
+  void displayIP(){
+    setBacklight(255);
+    lcdPrint2("IP :", curIp);
+    delay(DISPLY_DURATION);
+    shutdownDisplay();
+
+  }
   void checkDisplay(){
     uint8_t butt = getButton();
 
-    #ifndef WITH_PWR_CTL
-    if (butt){
-    #else
     if (butt == LONG_CLICK){
+      #ifdef WITH_PWR_CTL
       displayPower();
+      #endif
+      displayIP();
     }else if (butt == SHORT_CLICK){
-    #endif
       displayMetrics();
     }
   }
@@ -369,7 +373,7 @@ void serialComHandler(char *cmd){
     com.print("DONE");
   }else if (strstr(cmd, SET_IP)){
     strcpy(curIp, cmd + 3);
-    displayPower();
+    displayIP();
   #endif
   }
 }

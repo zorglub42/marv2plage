@@ -348,9 +348,15 @@
 										<div class="col-2">
 											<label for="clientSSID">SSID</label>
 										</div>
-										<div class="col-10">
-											<input type="text" class="form-control" name="clientSSID" id="clientSSID" onclick="$('#wifiNetworks').modal('show');$('#settings').modal('hide');">
+										<div class="col-8">
+											<input type="text" class="form-control" name="clientSSID" id="clientSSID">
 										</div>
+										<div class="col-1 eye-butt">
+											<button type="button" class="btn btn-default" title="Voir le mot de passe" onclick="$('#wifiNetworks').modal('show');$('#settings').modal('hide');">
+												<span class="fas fa-search" aria-hidden="true"></span>
+											  </button>
+										</div>
+
 									</div>
 									<div class="row">
 										<div class="col-2">

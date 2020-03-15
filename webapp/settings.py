@@ -7,7 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 """FFBC8 Weather station webapp settings."""
 # Flask-Restplus settings
-FLASK_DEBUG = True  # Do not use debug mode in production
+FLASK_DEBUG = False  # Do not use debug mode in production
 # RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'none'
 RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'list'
 # RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'full'

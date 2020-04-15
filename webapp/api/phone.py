@@ -105,7 +105,11 @@ class Time(Resource):
             sock.connect(server_address)
             sock.sendall(cmd.encode("utf-8"))
             sock.close()
-            subprocess.run(settings.conf["COMMANDS"]["settime"].split(" "))
+            subprocess.run(
+                (
+                    settings.conf["COMMANDS"]["settime"] + " " + data["timestamp"]
+                ).split(" ")
+            )
 
         except Exception:  # pylint: disable=broad-except
             self.logger.exception("Error while connecting arduino")

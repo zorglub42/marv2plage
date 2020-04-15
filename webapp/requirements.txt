@@ -3,3 +3,4 @@ requests
 colorlog
 python-dateutil
 gunicorn
+Werkzeug==0.16.1

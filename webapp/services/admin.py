@@ -133,7 +133,7 @@ class AdminService(object):
 
         cmd = (
             "iwlist " + settings.conf["WIFI"]["if"] + " scan| "
-            'egrep "Qual|SSID"'
+            'egrep "Qual|SSID" || /bin/true'
         )
 
         data = subprocess.check_output(

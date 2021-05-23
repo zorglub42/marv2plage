@@ -6,8 +6,10 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 
+
 MODE=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.mode|awk -F '"' '{print$2}' )
 IF=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.if|awk -F '"' '{print$2}' )
+
 
 function createHotspot(){
 	ps aux | grep openvpn|grep -v grep | awk '{print $2}' | xargs kill
@@ -43,13 +45,30 @@ EOF
 }
 
 function connectWIFI(){
+#TODO: list os ssids for client mode: parse keys
+# for k in $(cat test.json | jq .WIFI.client|jq "keys" | jq -r ".[]") ; do
+# 	echo key=$k
+# done
+
 	service dnsmasq stop
 	service hostapd stop
-	SSID=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.client.ssid|awk -F '"' '{print$2}' )
-	iwlist $IF scan  | grep $SSID > /dev/null
-	if [ $? -eq 0 ] ; then
-		PASSPHRASE=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.client.passphrase|awk -F '"' '{print$2}' )
-		echo "$SSID found, trying to connectWIFI"
+	SSID="" #$(cat /etc/meteo/webapp-settings.json | jq .WIFI.client[0].ssid|awk -F '"' '{print$2}' )
+
+	iwlist $IF scan > /tmp/wifi.scan
+	for KEY in $(cat /etc/meteo/webapp-settings.json | jq .WIFI.client| jq "keys"| jq -r ".[]") ; do
+		echo K=$KEY
+		CUR_SSID=$(cat /etc/meteo/webapp-settings.json | jq -r .WIFI.client[$KEY].ssid)
+		CUR_PASSPHRASE=$(cat /etc/meteo/webapp-settings.json | jq -r .WIFI.client[$KEY].passphrase)
+		grep $CUR_SSID /tmp/wifi.scan> /dev/null
+		if [ $? -eq 0 ] ; then 
+			echo "$CUR_SSID found in wifi neighbourhood"
+			SSID=$CUR_SSID
+			PASSPHRASE=$CUR_PASSPHRASE
+		fi
+	done
+	if [ "$SSID" != "" ] ; then
+		#PASSPHRASE=$(cat /etc/meteo/webapp-settings.json | jq .WIFI.client.passphrase|awk -F '"' '{print$2}' )
+		echo "Cool! $SSID was found, let's try to connectWIFI"
 		cat <<EOF > /etc/wpa_supplicant/wpa_supplicant.conf
 country=FR
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -107,7 +126,8 @@ EOF
 				MAC=$(ifconfig wlan0| grep ether | awk '{print $2}')
 				Z_IP=$(ifconfig $Z_IF | grep "inet 10.10.10"|awk '{print $2}')
 				echo Connected to zorg network with ip $Z_IP
-				curl "http://10.10.10.22:84/chat/bot/api/station.php?mac=$MAC&ip=$Z_IP"
+				echo "curl -i http://10.10.10.22:84/chat/bot/api/station.php?mac=$MAC&ip=$Z_IP"
+				curl -i "http://10.10.10.22:84/chat/bot/api/station.php?mac=$MAC&ip=$Z_IP"
 				
 			fi
 
@@ -116,7 +136,6 @@ EOF
 		createHotspot
 	fi
 }
-
 
 ps aux | grep openvpn|grep -v grep | awk '{print $2}' | xargs kill
 

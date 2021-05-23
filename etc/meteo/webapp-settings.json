@@ -1,0 +1,40 @@
+{
+    "ARDUINO": {
+        "port": 6942,
+        "server": "127.0.01"
+    },
+    "COMMANDS": {
+        "shutdown": "/sbin/init 0",
+        "setwifi": "/home/pi/bin/setwifi.sh",
+        "settime": "/home/pi/bin/set-time",
+        "reboot": "/sbin/init 6"
+    },
+    "INFLUX": {
+        "user": null,
+        "pass": null,
+        "db": "meteo",
+        "host": "http://127.0.0.1:8086"
+    },
+    "WIFI": {
+        "if": "wlp0s20f3",
+        "mode": "client",
+        "client": [
+            {
+                "ssid": "my-wifi-hostspot1",
+                "passphrase": "my-wifi-hostspot1"
+            },
+            {
+                "ssid": "my-wifi-hostspot2",
+                "passphrase": "my-wifi-hostspot2"
+            },
+            {
+                "ssid": "my-wifi-hostspot3",
+                "passphrase": "my-wifi-hostspot3"
+            }
+        ],
+        "hotspot": {
+            "ssid": "ffbc8-meteo",
+            "passphrase": "marvin2plage"
+        }
+    }
+}

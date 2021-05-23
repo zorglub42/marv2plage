@@ -6,6 +6,12 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 
 var preferences = {
+	wifiClientCount: 3,
+	curWifiClient: 0,
+	showWifiNeighborhood: (client_id) => {
+		preferences.curWifiClient = client_id
+		$('#wifiNetworks').modal('show');$('#settings').modal('hide');
+	},
 	getPrefs: () =>{
 		json = getCookie("ffbc8meteo")
 		if (json == ""){
@@ -148,14 +154,16 @@ var preferences = {
 				$(field).attr('type','password')
 
 			},
-			2000
+			5000
 		)
 
 	},
 	wifiSettings: async ()=>{
 		preferences.hideAllSettings()
 		$('#hotspotPASS').attr('type','password')
-		$('#clientPASS').attr('type','password')
+		for (i=0;i<preferences.wifiClientCount;i++){
+			$('#clientPASS' + i).attr('type','password')
+		}
 		$('#wifiSettings').show()
 		resp = await fetch("api/admin/system/wifi").catch(
 			error => { console.log(error)}
@@ -182,8 +190,10 @@ var preferences = {
 			preferences.checkWifiMode()
 			$('#hotspotSSID').val(data.hotspot.ssid)
 			$('#hotspotPASS').val(data.hotspot.passphrase)
-			$('#clientSSID').val(data.client.ssid)
-			$('#clientPASS').val(data.client.passphrase)
+			for (i=0;i<data.client.length;i++){
+				$('#clientSSID' + i).val(data.client[i].ssid)
+				$('#clientPASS' + i).val(data.client[i].passphrase)
+			}
 			$("#mac").html(data.mac)
 			
 		}else{
@@ -192,7 +202,7 @@ var preferences = {
 
 	},
 	setClientSSID: (ssid)=>{
-		$("#clientSSID").val(ssid)
+		$("#clientSSID" + preferences.curWifiClient).val(ssid)
 		$('#settings').modal('show');
 		$('#wifiNetworks').modal('hide');
 	},

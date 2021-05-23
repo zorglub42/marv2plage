@@ -154,12 +154,16 @@ var admin = {
 		)
 	},
 	applyWifi: ()=>{
+		clients=[]
+		for (i=0; $("#clientSSID" + i).length; i++){
+			clients[i]={
+				ssid: $("#clientSSID" + i).val(),
+				passphrase: $("#clientPASS" + i).val()
+			}
+		}
 		payload = {
 			mode: $('input[name=wifiMode]:checked', '#frmWifiSettings').val(),
-			client: {
-				ssid: $("#clientSSID").val(),
-				passphrase: $("#clientPASS").val()
-			},
+			client: clients,
 			hotspot: {
 				ssid: $("#hotspotSSID").val(),
 				passphrase: $("#hotspotPASS").val()

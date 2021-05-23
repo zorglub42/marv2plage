@@ -6,8 +6,8 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 """FFBC8 weatherstation data model."""
-from flask_restplus import fields
-from api.restplus import API
+from flask_restx import fields
+from api.restx import API
 
 # Model desecription for methods parameters
 SYSTEM_COMMAND_PAYLOAD = API.model("systemCommand", {
@@ -159,7 +159,9 @@ WIFI_CONFIG = API.model("wifiConfig", {
         description="Nominal wifi mode",
         enum=["client", "hotspot"]
     ),
-    "client": fields.Nested(WIFI_SETTINGS),
+    "client": fields.List(
+        fields.Nested(WIFI_SETTINGS)
+    ),
     "hotspot": fields.Nested(WIFI_SETTINGS)
 })
 WIFI_CONFIG_EXTENDED = API.inherit("wifiConfigAdvanced", WIFI_CONFIG, {

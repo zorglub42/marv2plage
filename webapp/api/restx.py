@@ -8,7 +8,7 @@
 """Restplus library configuration and startup."""
 import logging
 
-from flask_restplus import Api
+from flask_restx import Api
 
 import settings
 

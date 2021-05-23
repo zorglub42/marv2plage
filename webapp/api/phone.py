@@ -11,9 +11,9 @@ import socket
 import subprocess
 
 from flask import request
-from flask_restplus import Resource
+from flask_restx import Resource
 import requests
-from api.restplus import API
+from api.restx import API
 
 import settings
 NS = API.namespace(

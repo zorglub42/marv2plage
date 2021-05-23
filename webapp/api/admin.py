@@ -9,11 +9,11 @@
 import logging
 
 from flask import request
-from flask_restplus import Resource
+from flask_restx import Resource
 
 from api.datamodel import SYSTEM_COMMAND_PAYLOAD, SYSTEM_TIME,\
     WIFI_CONFIG_EXTENDED, WIFI_CONFIG
-from api.restplus import API
+from api.restx import API
 from services.admin import AdminService
 
 NS = API.namespace(

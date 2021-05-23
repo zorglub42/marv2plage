@@ -9,10 +9,10 @@
 import logging.config
 
 # from flask import Flask, render_template, url_for
-import flask_restplus.apidoc
+import flask_restx.apidoc
 from flask import Blueprint, Flask
 
-from api.restplus import API as api
+from api.restx import API as api
 from api.admin import NS as admin_ns
 from api.sensors import NS as sensors_ns
 from api.phone import NS as phone_ns
@@ -121,19 +121,19 @@ def configure_app(flask_app):
     """
     flask_app.config[
         'SWAGGER_UI_DOC_EXPANSION'
-    ] = settings.RESTPLUS_SWAGGER_UI_DOC_EXPANSION
+    ] = settings.RESTX_SWAGGER_UI_DOC_EXPANSION
 
     flask_app.config[
-        'RESTPLUS_VALIDATE'
-    ] = settings.RESTPLUS_VALIDATE
+        'RESTX_VALIDATE'
+    ] = settings.RESTX_VALIDATE
 
     flask_app.config[
-        'RESTPLUS_MASK_SWAGGER'
-    ] = settings.RESTPLUS_MASK_SWAGGER
+        'RESTX_MASK_SWAGGER'
+    ] = settings.RESTX_MASK_SWAGGER
 
     flask_app.config[
         'ERROR_404_HELP'
-    ] = settings.RESTPLUS_ERROR_404_HELP
+    ] = settings.RESTX_ERROR_404_HELP
 
     flask_app.config[
         'APPLICATION_ROOT'
@@ -164,7 +164,7 @@ def initialize_app(flask_app):
     api.add_namespace(phone_ns)
 
     # Define base_url from swaggerui resources (js, css...)
-    api_doc = flask_restplus.apidoc.apidoc
+    api_doc = flask_restx.apidoc.apidoc
     api_doc.url_prefix = settings.API["base_url"] + "/doc"
 
     flask_app.register_blueprint(blueprint)

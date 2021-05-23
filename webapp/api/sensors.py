@@ -8,11 +8,11 @@
 """FFBC8 weatherstation sensors API."""
 import logging
 
-from flask_restplus import Resource, reqparse
+from flask_restx import Resource, reqparse
 from api.datamodel import (
     LAST_SENSORS_VALUES, GET_SENSOR_VALUES, SENSOR_VALUES_TREND
 )
-from api.restplus import API
+from api.restx import API
 from services.sensors import SensorsService
 NS = API.namespace(
     'sensors',

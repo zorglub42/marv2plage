@@ -14,6 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href=".{{ url_for('static', filename='css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href=".{{ url_for('static', filename='css/all.css') }}">
+	<link rel="stylesheet" href=".{{ url_for('static', filename='css/web-gui.css') }}">
 
 	<script src=".{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js')}}"></script>
 	<script src=".{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
@@ -21,120 +22,6 @@
 	<script src=".{{ url_for('static', filename='js/gauge.min.js') }}"></script>
 	<script src=".{{ url_for('static', filename='js/Chart.bundle.js') }}"></script>
 	<script src=".{{ url_for('static', filename='js/admin.js') }}"></script>
-
-	<style>
-		@font-face {
-			font-family: 'cruiser';
-			src: url(".{{ url_for('static', filename='fonts/Downtown.ttf') }}") format('truetype');
-			font-weight: normal;
-			font-style: normal;
-
-		}
-
-		.eye-butt{
-			padding-top: 5px;
-			padding-left: 0px;
-		}
-
-		.gauge {
-			height: 550px;
-		}
-		.chart {
-			background: #fff;
-		}
-
-		.actionPict{
-			width: 75px;
-		}
-		#logo {
-			margin-top: 50px;
-			margin-bottom: 50px;
-			text-align: right;
-			margin-left: 50px;
-		}
-		#img-logo {
-			background: #fff;
-			height: 150px;
-		}
-		#pageTitle{
-			color: #fff;
-			text-align: center;
-			font-family: cruiser;
-			font-size: 150px;
-		}
-		.hrTitle {
-			display:block;
-			border:0px;
-			height:15px;
-			width: 90%;
-			background-image: url(".{{ url_for('static', filename='img/inox.png') }}");
-			-webkit-border-radius: 10px;
-			-moz-border-radius: 10px;
-			border-radius: 10px;
-		}
-
-		.hidden{
-			/* display: none; */
-		}
-		@media all and (max-width: 768px) {
-			.hrTitle {
-				height:  10px;
-			}
-			.btn-settings{
-				margin-bottom: 5px;
-			}
-			.chartCanvas{
-
-				height:350px !important;
-
-			}
-			.chart {
-				padding-left: 0px;
-				padding-right: 0px;
-			}
-			.gauge {
-				height: 300px;
-			}
-			#logo {
-				margin-top: 5px;
-				margin-bottom: 5px;
-				text-align: right;
-				margin-left: 5px;
-				margin-right: 5px;
-			}
-			#img-logo {
-				background: #fff;
-				height: 50px;
-			}
-			#pageTitle{
-				color: #fff;
-				text-align: center;
-				font-family: cruiser;
-				font-size: 35px;
-			}
-		}
-
-		body{
-			background-image: url(".{{ url_for('static', filename='img/carbon.jpg') }}")
-		}
-			
-
-		.centered{
-			text-align: center
-		}
-
-		#hrCharts{
-			margin-bottom: 90px;
-		}
-		#content{
-			margin-right: 30px;
-			margin-left: 30px;
-		}
-		#settingsResult{
-			font-family: 'Courier New', Courier
-
-		}
-	</style>
 </head>
 
 <body>

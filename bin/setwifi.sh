@@ -45,10 +45,6 @@ EOF
 }
 
 function connectWIFI(){
-#TODO: list os ssids for client mode: parse keys
-# for k in $(cat test.json | jq .WIFI.client|jq "keys" | jq -r ".[]") ; do
-# 	echo key=$k
-# done
 
 	service dnsmasq stop
 	service hostapd stop
@@ -59,11 +55,12 @@ function connectWIFI(){
 		echo K=$KEY
 		CUR_SSID=$(cat /etc/meteo/webapp-settings.json | jq -r .WIFI.client[$KEY].ssid)
 		CUR_PASSPHRASE=$(cat /etc/meteo/webapp-settings.json | jq -r .WIFI.client[$KEY].passphrase)
-		grep $CUR_SSID /tmp/wifi.scan> /dev/null
+		grep '"'$CUR_SSID'"' /tmp/wifi.scan> /dev/null
 		if [ $? -eq 0 ] ; then 
 			echo "$CUR_SSID found in wifi neighbourhood"
 			SSID=$CUR_SSID
 			PASSPHRASE=$CUR_PASSPHRASE
+			break
 		fi
 	done
 	if [ "$SSID" != "" ] ; then

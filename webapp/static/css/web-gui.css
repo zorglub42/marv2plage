@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'cruiser';
-    src: url("/static/fonts/Downtown.ttf") format('truetype');
+    src: url("../../static/fonts/Downtown.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
 
@@ -50,7 +50,7 @@
     border:0px;
     height:15px;
     width: 90%;
-    background-image: url("/static/img/inox.png");
+    background-image: url("../../static/img/inox.png");
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -98,7 +98,7 @@
 }
 
 body{
-    background-image: url("/static/img/carbon.jpg")
+    background-image: url("../../static/img/carbon.jpg")
 }
     
 

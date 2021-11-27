@@ -88,6 +88,7 @@
   #define PWR_SWITCH 7
 
   #define PWR_SAMPLING_DURATION 60
+  #define PWR_RELAY_ON_DURATION 5
   #define POWER_LOAD "PWR_LOAD"
 
   time_t pwr_prev;
@@ -232,7 +233,7 @@ float cur_wind_speed;
 
     if (now() - pwr_prev >= PWR_SAMPLING_DURATION  || force){
       digitalWrite(PWR_SWITCH, HIGH);
-      delay(100);
+      delay(PWR_RELAY_ON_DURATION);
     
       int8_t load = 0;
       if (digitalRead(PWR_1)) load+=25;

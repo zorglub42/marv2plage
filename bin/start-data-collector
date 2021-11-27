@@ -12,8 +12,9 @@ while [ $? -ne 0 ] ; do
         sleep 1
         netstat -laputn | grep 6942 | grep LISTEN
 done
+sleep 2
 cd /home/pi/bin/
-/home/pi/bin/data-collector.py &
+/home/pi/bin/data-collector.py > /dev/null &
 
 sleep 5
 

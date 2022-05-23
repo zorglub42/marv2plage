@@ -11,10 +11,14 @@ LOG_FILE=/var/log/startup.log
 :>$LOG_FILE
 
 ps aux | grep python| awk '{print $2}' | xargs kill
-systemctl restart arduino-controller
+systemctl stop arduino-controller
+sleep 5
+systemctl start arduino-controller
+
 cd /home/pi/bin/
 #nohup /home/pi/restart-arduino.sh 2>&1 >/dev/null   &
 nohup /home/pi/bin/start-data-collector 2>&1 >/var/log/start-data-collector.log   &
+
 cd /tmp
 nohup /home/pi/bin/start-webapp 2>&1 > /dev/null  &
 nohup su - pi -c "/home/pi/bin/gotty -p 4242 -w -c 'pi:ffbc8meteo' bash" 2>&1 >/dev/null &
